@@ -1,0 +1,13 @@
+{
+	"name": "cptechinc/dplus-services",
+    "type": "library",
+    "description": "Classes for Dplus Online",
+    "keywords": ["crm"],
+    "homepage": "http://github.com/cptechinc/dpluso-processwire-classes",
+	"autoload": {
+		"files": [
+			"src/DplusEmailer.class.php",
+            "src/PDFMaker.class.php"
+		]
+	}
+}
