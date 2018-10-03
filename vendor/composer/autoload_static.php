@@ -4,11 +4,14 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5b3b8f952ad302c13f1cfeef6eea5bf8
+class ComposerStaticInit1a8e2bab4791525eb66e7a11fcef0ca5
 {
     public static $files = array (
         'b00f0565529779e604d8b703f4652f8d' => __DIR__ . '/../..' . '/src/DplusEmailer.class.php',
         '07baa111632d2cda072e92b2cd96b11b' => __DIR__ . '/../..' . '/src/PDFMaker.class.php',
+        '59d9564ef2a670cc1085058d53b20a19' => __DIR__ . '/../..' . '/src/UploadedFile.class.php',
+        'f5c4d7779ddfe062e378a681d014d586' => __DIR__ . '/../..' . '/src/FileUploader.class.php',
+        '4d3658d5c7301d3662f989ee734ab8a1' => __DIR__ . '/../..' . '/src/SpreadSheetWriter.class.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

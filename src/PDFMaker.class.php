@@ -10,10 +10,10 @@
 		protected $url = false;
 		
 		/**
-		 * SessionID to use
+		 * File Identifier ex. Sales Order Number, Quote Number, RGA #
 		 * @var string
 		 */
-		protected $sessionID = false;
+		protected $fileID = false;
 		
 		/**
 		 * File Type is a descriptor to add to the end of the file
@@ -36,6 +36,7 @@
 			'binary' => '/usr/local/bin/wkhtmltopdf',
 			// Explicitly tell wkhtmltopdf that we're using an X environment
 			'use-xserver',
+			//'footer-right "Page [page] of [toPage]"',
 			// Enable built in Xvfb support in the command
 			'commandOptions' => array(
 				'enableXvfb' => true,
@@ -54,20 +55,26 @@
 			'quote' => 'CUSTQT'
 		);
 		
-		public function __construct($sessionID, $filetype, $url) {
+		public function __construct($fileID, $filetype, $url) {
 			parent::__construct($this->options);
-			$this->sessionID = $sessionID;
+			$this->fileID = $fileID;
 			$this->filetype = $filetype;
 			$this->url = $url;
 		}
 		
+		public function add_pagenumber() {
+			$this->options[] = 'footer-right "Page [page] of [toPage]"';
+			$this->setOptions($this->options);
+		}
+		
 		/**
-		 * Takes the SessionID and URL and Makes a PDF out of that page
+		 * Takes the fileID and URL and Makes a PDF out of that page
 		 * @return string file
 		 */
 		public function process() {
-			$file = DplusWire::wire('config')->documentstoragedirectory.$this->sessionID."-$this->filetype".".pdf";
-			$this->filename = $this->sessionID."-$this->filetype".".pdf";
+			$filename = str_replace("-$this->filetype", '', $this->fileID)."-$this->filetype";
+			$file = DplusWire::wire('config')->documentstoragedirectory."$filename.pdf";
+			$this->filename = "$filename.pdf";
 			
 			if (file_exists($file)) {
 				unlink($file);

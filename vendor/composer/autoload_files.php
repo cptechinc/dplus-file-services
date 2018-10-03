@@ -8,4 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'b00f0565529779e604d8b703f4652f8d' => $baseDir . '/src/DplusEmailer.class.php',
     '07baa111632d2cda072e92b2cd96b11b' => $baseDir . '/src/PDFMaker.class.php',
+    '59d9564ef2a670cc1085058d53b20a19' => $baseDir . '/src/UploadedFile.class.php',
+    'f5c4d7779ddfe062e378a681d014d586' => $baseDir . '/src/FileUploader.class.php',
+    '4d3658d5c7301d3662f989ee734ab8a1' => $baseDir . '/src/SpreadSheetWriter.class.php',
 );
