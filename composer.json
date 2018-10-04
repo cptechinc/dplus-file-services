@@ -1,5 +1,5 @@
 {
-	"name": "cptechinc/dplus-services",
+	"name": "cptechinc/dplus-file-services",
     "type": "library",
     "description": "Classes for Dplus Services",
     "keywords": ["crm"],
