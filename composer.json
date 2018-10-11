@@ -3,11 +3,10 @@
     "type": "library",
     "description": "Classes for Dplus Services",
     "keywords": ["crm"],
-    "homepage": "http://github.com/cptechinc/dplus-services",
+    "homepage": "http://github.com/cptechinc/dplus-file-services",
 	"autoload": {
-		"files": [
-			"src/DplusEmailer.class.php",
-            "src/PDFMaker.class.php"
-		]
+		"psr-4": {
+			"Dplus\\FileServices\\": "src/"
+		}
 	}
 }

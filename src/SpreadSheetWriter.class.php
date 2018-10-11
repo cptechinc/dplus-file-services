@@ -1,10 +1,12 @@
 <?php
+    namespace Dplus\FileServices;
+    
     /**
      * Class for Creating Spreadsheets
      */
     class SpreadSheetWriter {
-        use ThrowErrorTrait;
-		use MagicMethodTraits;
+        use \Dplus\Base\ThrowErrorTrait;
+		use \Dplus\Base\MagicMethodTraits;
         
         /**
          * File that will be created by any one of the functions

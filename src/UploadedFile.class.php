@@ -1,11 +1,13 @@
 <?php
+    namespace Dplus\FileServices;
+    
     /**
      * Class for containing Properties about a file or a theoretical file
      */
     class UploadedFile {
-        use ThrowErrorTrait;
-		use MagicMethodTraits;
-        use CreateFromObjectArrayTraits;
+        use \Dplus\Base\ThrowErrorTrait;
+		use \Dplus\Base\MagicMethodTraits;
+        use \Dplus\Base\CreateFromObjectArrayTraits;
         
         /**
          * File's original name
