@@ -1,7 +1,7 @@
 <?php 
 	namespace Dplus\FileServices;
-	
-	class PDFMaker extends mikehaertl\wkhtmlto\Pdf {
+
+	class PDFMaker extends \mikehaertl\wkhtmlto\Pdf {
 		use \Dplus\Base\ThrowErrorTrait;
 		use \Dplus\Base\MagicMethodTraits;
 		
