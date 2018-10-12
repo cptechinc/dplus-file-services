@@ -5,7 +5,7 @@
 	 * Class that implements php-simple-mail to Send Emails out of Dpluso
 	 */
 	class DplusEmailer {
-		use Dplus\Base\ThrowErrorTrait;
+		use \Dplus\Base\ThrowErrorTrait;
 		
 		/**
 		 * User ID of person mailing, used to retreive their name and email

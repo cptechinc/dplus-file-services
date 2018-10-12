@@ -7,8 +7,8 @@
      * Class to handle File Uploading from $_FILES array and moves it to a 
      */
     class FileUploader {
-        use Dplus\Base\ThrowErrorTrait;
-		use Dplus\Base\MagicMethodTraits;
+        use \Dplus\Base\ThrowErrorTrait;
+		use \Dplus\Base\MagicMethodTraits;
         
         /**
          * Allowed File Extensions
