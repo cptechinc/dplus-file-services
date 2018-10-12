@@ -6,17 +6,34 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit1a8e2bab4791525eb66e7a11fcef0ca5
 {
-    public static $files = array (
-        'b00f0565529779e604d8b703f4652f8d' => __DIR__ . '/../..' . '/src/DplusEmailer.class.php',
-        '07baa111632d2cda072e92b2cd96b11b' => __DIR__ . '/../..' . '/src/PDFMaker.class.php',
-        '59d9564ef2a670cc1085058d53b20a19' => __DIR__ . '/../..' . '/src/UploadedFile.class.php',
-        'f5c4d7779ddfe062e378a681d014d586' => __DIR__ . '/../..' . '/src/FileUploader.class.php',
-        '4d3658d5c7301d3662f989ee734ab8a1' => __DIR__ . '/../..' . '/src/SpreadSheetWriter.class.php',
+    public static $prefixLengthsPsr4 = array (
+        'D' => 
+        array (
+            'Dplus\\FileServices\\' => 19,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'Dplus\\FileServices\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
+        ),
+    );
+
+    public static $classMap = array (
+        'Dplus\\FileServices\\DplusEmailer' => __DIR__ . '/../..' . '/src/DplusEmailer.class.php',
+        'Dplus\\FileServices\\FileUploader' => __DIR__ . '/../..' . '/src/FileUploader.class.php',
+        'Dplus\\FileServices\\PDFMaker' => __DIR__ . '/../..' . '/src/PDFMaker.class.php',
+        'Dplus\\FileServices\\SpreadSheetWriter' => __DIR__ . '/../..' . '/src/SpreadSheetWriter.class.php',
+        'Dplus\\FileServices\\UploadedFile' => __DIR__ . '/../..' . '/src/UploadedFile.class.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1a8e2bab4791525eb66e7a11fcef0ca5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1a8e2bab4791525eb66e7a11fcef0ca5::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1a8e2bab4791525eb66e7a11fcef0ca5::$classMap;
 
         }, null, ClassLoader::class);
     }
