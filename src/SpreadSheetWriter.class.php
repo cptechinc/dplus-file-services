@@ -5,8 +5,8 @@
      * Class for Creating Spreadsheets
      */
     class SpreadSheetWriter {
-        use \Dplus\Base\ThrowErrorTrait;
-		use \Dplus\Base\MagicMethodTraits;
+        use Dplus\Base\ThrowErrorTrait;
+		use Dplus\Base\MagicMethodTraits;
         
         /**
          * File that will be created by any one of the functions

@@ -5,7 +5,7 @@
 	 * Class that implements php-simple-mail to Send Emails out of Dpluso
 	 */
 	class DplusEmailer {
-		use \Dplus\Base\ThrowErrorTrait;
+		use Dplus\Base\ThrowErrorTrait;
 		
 		/**
 		 * User ID of person mailing, used to retreive their name and email
@@ -171,7 +171,7 @@
 		 * @param bool  $html If body contains HTML
 		 */
 		public function set_body($body, $html = true) {
-			$stringer = new StringerBell();
+			$stringer = new Dplus\Base\StringerBell();
 			$this->hashtml = $html;
 			$body .= "<br>". $this->user->name;
 			$body .= "<br>" . $this->user->email;

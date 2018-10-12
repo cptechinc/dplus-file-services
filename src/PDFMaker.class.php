@@ -1,9 +1,11 @@
 <?php 
 	namespace Dplus\FileServices;
-
+	
+	use Dplus\ProcessWire\DplusWire as DplusWire;
+	
 	class PDFMaker extends \mikehaertl\wkhtmlto\Pdf {
-		use \Dplus\Base\ThrowErrorTrait;
-		use \Dplus\Base\MagicMethodTraits;
+		use Dplus\Base\ThrowErrorTrait;
+		use Dplus\Base\MagicMethodTraits;
 		
 		/**
 		 * URL of Page to convert to PDF
