@@ -1,8 +1,12 @@
 <?php
     namespace Dplus\FileServices;
 
-    use PhpOffice\PhpSpreadsheet\Reader\Xls, PhpOffice\PhpSpreadsheet\Reader\Xlsx, PhpOffice\PhpSpreadsheet\Reader\Csv;
-    use PhpOffice\PhpSpreadsheet\Writer\Xls, PhpOffice\PhpSpreadsheet\Writer\Xlsx, PhpOffice\PhpSpreadsheet\Writer\Csv;
+    use PhpOffice\PhpSpreadsheet\Reader\Xls as XlsReader;
+    use PhpOffice\PhpSpreadsheet\Reader\Xlsx as XlsxReader;
+    use PhpOffice\PhpSpreadsheet\Reader\Csv as CsvReader;
+    use PhpOffice\PhpSpreadsheet\Writer\Xls as XlsWriter;
+    use PhpOffice\PhpSpreadsheet\Writer\Xlsx as XlsxWriter;
+    use PhpOffice\PhpSpreadsheet\Writer\Csv as CsvWriter;
 
     /**
      * Class for Creating Spreadsheets
@@ -27,13 +31,13 @@
             // Check the Original File's extension in order to get the proper parser
             switch ($readfile->extension) {
                 case 'xls':
-                    $reader = new Xls();
+                    $reader = new XlsReader();
                     break;
                 case 'xlsx':
-                    $reader = new Xlsx();
+                    $reader = new XlsxReader();
                     break;
                 default:
-                    $reader = new Csv();
+                    $reader = new CsvReader();
                     $reader->setInputEncoding('CP1252');
                     $reader->setSheetIndex(0);
                     $reader->setDelimiter("\t");
@@ -63,13 +67,13 @@
             // Instantiate the correct Spreadsheet Writer based on file extension
             switch ($save_extension) {
                 case 'xls':
-                    $writer = new Xls($spreadsheet);
+                    $writer = new XlsWriter($spreadsheet);
                     break;
                 case 'xlsx':
-                    $writer = new Xlsx($spreadsheet);
+                    $writer = new XlsxWriter($spreadsheet);
                     break;
                 default:
-                    $writer = new Csv($spreadsheet);
+                    $writer = new CsvWriter($spreadsheet);
                     $writer->setUseBOM(true);
                     $writer->setLineEnding("\r\n");
                     $writer->setSheetIndex(0);

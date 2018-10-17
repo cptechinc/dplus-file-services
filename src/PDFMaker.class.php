@@ -1,10 +1,10 @@
 <?php 
 	namespace Dplus\FileServices;
 	
-	use mikehaertl\wkhtmlto\Pdf;
+	use mikehaertl\wkhtmlto\Pdf as Wkhtmlpdf;
 	use Dplus\ProcessWire\DplusWire;
 	
-	class PDFMaker extends mikehaertl\wkhtmlto\Pdf {
+	class PDFMaker extends Wkhtmlpdf {
 		use \Dplus\Base\ThrowErrorTrait;
 		use \Dplus\Base\MagicMethodTraits;
 		
