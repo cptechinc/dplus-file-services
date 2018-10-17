@@ -1,11 +1,16 @@
 <?php
 	namespace Dplus\FileServices;
 	
+	use Dplus\Base\StringerBell;
+	use SimpleMail;
+	use LogmUser;
+	
 	/**
 	 * Class that implements php-simple-mail to Send Emails out of Dpluso
 	 */
 	class DplusEmailer {
 		use \Dplus\Base\ThrowErrorTrait;
+		use \Dplus\Base\MagicMethodTraits;
 		
 		/**
 		 * User ID of person mailing, used to retreive their name and email
@@ -37,37 +42,35 @@
 		 * @var string
 		 */
 		protected $subject;
+
 		/**
 		 * Recipient(s) of email
-		 * Key Value array that is Email => Recipient Name
 		 * @var array
 		 */
-		protected $emailto = false;
+		protected $emailto;
 		
 		/**
 		 * Reply to 
 		 * Key Value array that is Email => Reply Name
-		 * @var array
+		 * @var EmailContact
 		 */
-		protected $replyto = false;
+		protected $replyto;
 		
 		/**
 		 * Who to show the Email was from
 		 * Key Value array that is Email => Email From Name
-		 * @var array
+		 * @var EmailContact
 		 */
-		protected $emailfrom = false; 
-		
+		protected $emailfrom;
+
 		/**
 		 * Blind Carbon Copy
-		 * Key Value array that is Recipient => Email Name
 		 * @var array
 		 */
 		protected $bcc = false;
 		
 		/**
 		 * Carbon Copy
-		 * Key Value array that is Recipient => Email Name
 		 * @var array
 		 */
 		protected $cc = false;
@@ -79,75 +82,40 @@
 		protected $body;
 		
 		/**
-		 * Attached File
-		 * @var string File Path
+		 * Array of Filepaths (string)
+		 * @var array File Paths
 		 */
-		protected $file = false;
+		protected $files = array();
 		
 		/**
 		 * Send Blind Carbon to Self
 		 * @var bool
 		 */
 		protected $selfbcc = false;
-		
-		/**
-		 * Creates Instance of Dplus Emailer
-		 * @param string $loginID User's Login ID
-		 */
-		function __construct($loginID) {
-			$this->user = LogmUser::load($loginID);
-			if (!$this->user) {
-				$this->error("Could Not Find User with loginid of $userID");
-				return false;
-			}
-			$this->replyto = array($this->user->email => $this->user->name);
-			$this->emailfrom = array($this->user->email => $this->user->name);
-		}
-		
-		/* =============================================================
-			GETTERS
-		============================================================ */
-		/**
-		 * Magic function to open up properties to be examined
-		 * @param  string $property string
-		 * @return mixed          Property value
-		 */
-		public function __get($property) {
-			$method = "get_{$property}";
-			if (method_exists($this, $method)) {
-				return $this->$method();
-			} elseif (property_exists($this, $property)) {
-				return $this->$property;
-			} else {
-				$this->error("This property ($property) does not exist");
-			}
-		}
-		
-		/**
-		 * Return File Directory
-		 * @return string Directory This instance is using for files
-		 */
-		public function get_filedirectory() {
-			return self::$filedirectory;
-		}
+
 		
 		/* =============================================================
 			SETTERS
 		============================================================ */
 		/**
-		 * Since properties are protected, we make a set function to allow changing of values
-		 * @param string $property Property of Instance
-		 * @param mixed $data     value to give to $this->$property
+		 * Sets the Reply To and Email From Logm User Details
+		 * @param string $userID User's Login ID
 		 */
-		public function set($property, $data) {
-			$method = "set_{$property}";
-			if (method_exists($this, $method)) {
-				return $this->$method($data);
-			} else {
-				$this->error("This property ($property) does not exist");
+		public function set_fromlogmuser($userID) {
+			$user = LogmUser::load($userID);
+
+			if (!$user) {
+				$this->error("Could Not Find User with loginid of $userID");
+				return false;
 			}
+			$contact = new EmailContact();
+			$contact->set('email', $user->email);
+			$contact->set('name', $user->name);
+			$contact->set('phone', $user->phone);
+			$this->replyto = $contact;
+			$this->emailfrom = $contact;
 		}
-		
+
 		/**
 		 * Sets the subject of the email
 		 * @param string $subject Subject Line
@@ -157,53 +125,50 @@
 		}
 		
 		/**
-		 * Sets Email to 
-		 * @param string $email Recipient Email
-		 * @param string $name  Recipient Name
-		 */
-		public function set_emailto($email, $name) {
-			$this->emailto = array($email => $name); 
-		}
-		
-		/**
 		 * Sets the Body text
 		 * @param string  $body Body Text
-		 * @param bool  $html If body contains HTML
+		 * @param bool    $html If body contains HTML
 		 */
 		public function set_body($body, $html = true) {
-			$stringer = new Dplus\Base\StringerBell();
+			$stringer = new StringerBell();
 			$this->hashtml = $html;
-			$body .= "<br>". $this->user->name;
-			$body .= "<br>" . $this->user->email;
-			$body .= "<br>" . $stringer->format_phone($this->user->phone) ;
+			$body .= "<br>". $this->replyto->name;
+			$body .= "<br>" . $this->replyto->email;
+			$body .= "<br>" . $stringer->format_phone($this->replyto->phone) ;
 			$this->body = $body;
 		}
 		
 		/**
-		 * Sets the value for filename
-		 * @param string $filename path/to/file
+		 * Adds to $this->files array
+		 * @param string $filepath path/to/file
 		 */
-		public function set_file($filename) {
+		public function add_file($filepath) {
 			$this->hasfile = true;
-			$this->file = $filename;
+			$this->files[] = $filepath;
+		}
+
+		/**
+		 * Add contact to send to 
+		 * @param EmailContact $contact Contact 
+		 */
+		public function add_emailto(EmailContact $contact) {
+			$this->emailto[] = $contact;
 		}
 		
 		/** 
 		 * Set the Carbon Copy Array
-		 * @param string $email Email to Carbon Copy
-		 * @param string $name  Name of Recipient to Carbon Copy
+		 * @param EmailContact $contact Contact
 		 */
-		public function set_cc($email, $name) {
-			$this->cc = array($name => $email);
+		public function add_cc(EmailContact $contact) {
+			$this->cc[] = $contact;
 		}
 		
 		/** 
 		 * Set the Blind Carbon Copy Array
-		 * @param string $email Email to Blind Carbon Copy
-		 * @param string $name  Name of Recipient to Carbon Copy
+		 * @param EmailContact $contact Contact
 		 */
-		public function set_bcc($email, $name) {
-			$this->bcc = array($name => $email);
+		public function add_bcc(EmailContact $contact) {
+			$this->bcc[] = $contact;
 		}
 		
 		/**
@@ -214,14 +179,7 @@
 			$this->selfbcc = $val;
 		}
 		
-		/**
-		 * Set the file directory to use
-		 * @param string $dir directory path
-		 */
-		public function set_filedirectory($dir) {
-			self::$filedirectory = $dir;
-		}
-		
+
 		/* =============================================================
 			CLASS FUNCTIONS
 		============================================================ */
@@ -235,38 +193,65 @@
 			->setSubject($this->subject)
 			->setMessage($this->body);
 			
-			foreach ($this->emailto as $email => $name) {
-				$emailer->setTo($email, $name);
+			foreach ($this->emailto as $contact) {
+				$emailer->setTo($contact->email, $contact->name);
 			}
 			
-			foreach ($this->emailfrom as $email => $name) {
-				$emailer->setFrom($email, $name);
-			}
-			
-			foreach ($this->replyto as $email => $name) {
-				$emailer->setReplyTo($email, $name);
-			}
+			$emailer->setFrom($this->emailfrom->email, $this->emailfrom->name);
+			$emailer->setReplyTo($this->replyto->email, $this->replyto->name);
 			
 			if ($this->selfbcc) {
-				$this->set_bcc($this->user->email, $this->user->name);
+				$this->add_bcc($this->replyto);
 			}
 			
 			// setBcc allows setting from Array
 			if (!empty($this->bcc)) {
-				$emailer->setBcc($this->bcc);
+				$bcc = array();
+				foreach ($this->bcc as $contact) {
+					$bcc[$contact->name] = $contact->email;
+				}
+				$emailer->setBcc($bcc);
+			}
+			
+			if (!empty($this->cc)) {
+				$cc = array();
+				foreach ($this->cc as $contact) {
+					$cc[$contact->name] = $contact->email;
+				}
+				$emailer->setCc($cc);
 			}
 			
 			if ($this->hasfile) {
-				if (strpos($this->filedirectory, $this->file) !== false) {
-					$emailer->addAttachment($this->filedirectory.$this->file);
-				} else {
-					$emailer->addAttachment($this->file);
+				foreach($this->files as $file) {
+					$emailer->addAttachment($file);
 				}
+				
 			}
-			
-			/* if ($this->hashtml) {
-				//$emailer->setHtml();
-			} */
 			return $emailer->send();
 		}
+	}
+
+	class EmailContact {
+		use \Dplus\Base\ThrowErrorTrait;
+		use \Dplus\Base\MagicMethodTraits;
+		use \Dplus\Base\CreateFromObjectArrayTraits;
+		
+		/**
+		 * Email
+		 * @var string
+		 */
+		protected $email;
+		
+		/**
+		 * Contact Name
+		 * @var string
+		 */
+		protected $name;
+		
+		/**
+		 * Contact Phone
+		 * @var string
+		 */
+		protected $phone;
+
 	}
