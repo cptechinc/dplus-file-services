@@ -1,6 +1,9 @@
 <?php
     namespace Dplus\FileServices;
-    
+
+    use PhpOffice\PhpSpreadsheet\Reader\Xls, PhpOffice\PhpSpreadsheet\Reader\Xlsx, PhpOffice\PhpSpreadsheet\Reader\Csv;
+    use PhpOffice\PhpSpreadsheet\Writer\Xls, PhpOffice\PhpSpreadsheet\Writer\Xlsx, PhpOffice\PhpSpreadsheet\Writer\Csv;
+
     /**
      * Class for Creating Spreadsheets
      */
@@ -24,13 +27,13 @@
             // Check the Original File's extension in order to get the proper parser
             switch ($readfile->extension) {
                 case 'xls':
-                    $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+                    $reader = new Xls();
                     break;
                 case 'xlsx':
-                    $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+                    $reader = new Xlsx();
                     break;
                 default:
-                    $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+                    $reader = new Csv();
                     $reader->setInputEncoding('CP1252');
                     $reader->setSheetIndex(0);
                     $reader->setDelimiter("\t");
@@ -60,13 +63,13 @@
             // Instantiate the correct Spreadsheet Writer based on file extension
             switch ($save_extension) {
                 case 'xls':
-                    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
+                    $writer = new Xls($spreadsheet);
                     break;
                 case 'xlsx':
-                    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+                    $writer = new Xlsx($spreadsheet);
                     break;
                 default:
-                    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($spreadsheet);
+                    $writer = new Csv($spreadsheet);
                     $writer->setUseBOM(true);
                     $writer->setLineEnding("\r\n");
                     $writer->setSheetIndex(0);

@@ -1,7 +1,7 @@
 <?php
     namespace Dplus\FileServices;
     
-    use Dplus\ProcessWire\DplusWire as DplusWire;
+    use Dplus\ProcessWire\DplusWire;
     
     /**
      * Class for containing Properties about a file or a theoretical file
