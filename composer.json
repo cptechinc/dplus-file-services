@@ -2,12 +2,16 @@
 	"name": "cptechinc/dplus-file-services",
     "type": "library",
     "description": "Classes for Dplus Services",
-    "keywords": ["crm"],
-    "homepage": "http://github.com/cptechinc/dplus-services",
+    "keywords": ["dplus-pdf", "pdf", "dplus-csv", "dplus-xls"],
+	"homepage": "http://github.com/cptechinc/dplus-file-services",
+	"require": {
+		"mikehaertl/phpwkhtmltopdf": "^2.3",
+		"eoghanobrien/php-simple-mail": "^1.7",
+		"picqer/php-barcode-generator": "^0.2.2"
+	},
 	"autoload": {
-		"files": [
-			"src/DplusEmailer.class.php",
-            "src/PDFMaker.class.php"
-		]
+		"psr-4": {
+			"Dplus\\FileServices\\": "src/"
+		}
 	}
 }

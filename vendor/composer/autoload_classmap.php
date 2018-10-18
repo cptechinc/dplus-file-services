@@ -6,4 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Dplus\\FileServices\\DplusEmailer' => $baseDir . '/src/DplusEmailer.class.php',
+    'Dplus\\FileServices\\FileUploader' => $baseDir . '/src/FileUploader.class.php',
+    'Dplus\\FileServices\\PDFMaker' => $baseDir . '/src/PDFMaker.class.php',
+    'Dplus\\FileServices\\SpreadSheetWriter' => $baseDir . '/src/SpreadSheetWriter.class.php',
+    'Dplus\\FileServices\\UploadedFile' => $baseDir . '/src/UploadedFile.class.php',
 );

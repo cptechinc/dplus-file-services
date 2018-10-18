@@ -1,10 +1,14 @@
 <?php
+    namespace Dplus\FileServices;
+
+    use Dplus\ProcessWire\DplusWire;
+    
     /**
      * Class to handle File Uploading from $_FILES array and moves it to a 
      */
     class FileUploader {
-        use ThrowErrorTrait;
-		use MagicMethodTraits;
+        use \Dplus\Base\ThrowErrorTrait;
+		use \Dplus\Base\MagicMethodTraits;
         
         /**
          * Allowed File Extensions

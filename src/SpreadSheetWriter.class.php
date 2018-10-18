@@ -1,10 +1,19 @@
 <?php
+    namespace Dplus\FileServices;
+
+    use PhpOffice\PhpSpreadsheet\Reader\Xls as XlsReader;
+    use PhpOffice\PhpSpreadsheet\Reader\Xlsx as XlsxReader;
+    use PhpOffice\PhpSpreadsheet\Reader\Csv as CsvReader;
+    use PhpOffice\PhpSpreadsheet\Writer\Xls as XlsWriter;
+    use PhpOffice\PhpSpreadsheet\Writer\Xlsx as XlsxWriter;
+    use PhpOffice\PhpSpreadsheet\Writer\Csv as CsvWriter;
+
     /**
      * Class for Creating Spreadsheets
      */
     class SpreadSheetWriter {
-        use ThrowErrorTrait;
-		use MagicMethodTraits;
+        use \Dplus\Base\ThrowErrorTrait;
+		use \Dplus\Base\MagicMethodTraits;
         
         /**
          * File that will be created by any one of the functions
@@ -22,13 +31,13 @@
             // Check the Original File's extension in order to get the proper parser
             switch ($readfile->extension) {
                 case 'xls':
-                    $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+                    $reader = new XlsReader();
                     break;
                 case 'xlsx':
-                    $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+                    $reader = new XlsxReader();
                     break;
                 default:
-                    $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+                    $reader = new CsvReader();
                     $reader->setInputEncoding('CP1252');
                     $reader->setSheetIndex(0);
                     $reader->setDelimiter("\t");
@@ -58,13 +67,13 @@
             // Instantiate the correct Spreadsheet Writer based on file extension
             switch ($save_extension) {
                 case 'xls':
-                    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
+                    $writer = new XlsWriter($spreadsheet);
                     break;
                 case 'xlsx':
-                    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+                    $writer = new XlsxWriter($spreadsheet);
                     break;
                 default:
-                    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($spreadsheet);
+                    $writer = new CsvWriter($spreadsheet);
                     $writer->setUseBOM(true);
                     $writer->setLineEnding("\r\n");
                     $writer->setSheetIndex(0);
